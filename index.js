@@ -101,7 +101,7 @@ const managerInfo = () => {
                     }
                 }
             },
-            //Employee ID
+            //Manager's office number
             {
                 type: "input",
                 name: "officeNumber",
@@ -117,44 +117,76 @@ const managerInfo = () => {
         ])
 };
 
-//menu to quit
-const optionMenu = async () => {
-    const prompts = [
-        {
-            type: 'input',
-            name: 'inputValue',
-            message: 'Enter some input: '
-        },
-        {
-            type: 'input',
-            name: 'inputHello',
-            message: 'Hello: '
-        },
+
+//main menu to say yes or no 
+const mainMenu = () => {
+    return inquirer
+    .prompt ([
         {
             type: "confirm",
-            name: "option",
-            message: "Do you want to add team members?",
+            name: "optionToGoBack",
+            message: "Do you want to add a team member?",
             default: true
         }
-    ];
-    // .then((response) => 
-    // response.name == "Yes" ? console.log("add more") : console.log("im done"))
-    const { option, ...answers } = await
-        inquirer
-            .prompt(prompts);
-    // const newInputs = [...inputs, answers];
-    return option ? optionMenu() : outputErrorText("I'm done!")
+    ])
+    .then((data) => {
+        data.optionToGoBack ? addMembers() : outputErrorText("I'm done!")
+    })
 }
 
-const main = async () => {
-    const inputs = await optionMenu();
-};
+//menu to add more members
+const addMembers = () => {
+    return inquirer
+    .prompt ([{
+        type: "list",
+        name: "position",
+        message: "Please choose position:",
+        choices: ["Engineer", "Intern"]
+    },
+    //team member's ID number
+    {
+        type: "input",
+        name: "memberID",
+        message: "What is their ID number?",
+        validate: function (name) {
+            if (isNaN(name) || (!name)) {
+                outputErrorText("Please enter member's ID number!...")
+            } else {
+                return true
+            }
+        }
+    },
+    {
+        type: "input",
+        name: "memberEmail",
+        message: "What is their email address?",
+        validate: function (email) {
+            validEmail = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+([^<>()\.,;:\s@\"]{2,}|[\d\.]+))$/.test(email)
+            if (validEmail) {
+                return true;
+            } else {
+                outputErrorText("Please enter a valid email address...")
+            }
+        }
+    },
+    {
+        type: "confirm",
+        name: "option",
+        message: "Do you want to add more team members?",
+        default: true
+    },
+    ])
+    .then((data) => {
+        data.option ? addMembers() : outputErrorText("I'm done!")
+    })
+}
+
+addMembers()
 
 
 
-
-managerInfo()
-.then(main)
+// managerInfo()
+// .then(mainMenu)
 
 
 
