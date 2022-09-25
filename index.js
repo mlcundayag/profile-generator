@@ -1,5 +1,6 @@
 const inquirer = require('inquirer')
-const fs = require('fs')
+const fs = require('fs');
+const { validate } = require('@babel/types');
 
 const outputErrorText = (text) => console.log(`\x1b[31m${text}\x1b[0m`);
 
@@ -56,66 +57,104 @@ const generateHTML = ({ data }) =>
     </html>`;
 
 //inquiry for team info
-const teamInfo = () => {
+const managerInfo = () => {
     return inquirer
-    .prompt([
-        //manager Name
-        {
-            type: "input",
-            name: "managerName",
-            message: "Please enter team manager's name:",
-            validate: function(name) {
-                if (name) {
-                    return true;
-                } else {
-                    outputErrorText("Please enter manager's name!...")
+        .prompt([
+            //manager Name
+            {
+                type: "input",
+                name: "managerName",
+                message: "Please enter team manager's name:",
+                validate: function (name) {
+                    if (name) {
+                        return true;
+                    } else {
+                        outputErrorText("Please enter manager's name!...")
+                    }
                 }
-            }
-            
-        },
-        //Employee ID
-        {
-            type: "input",
-            name: "managerID",
-            message: "What is their ID number?",
-            validate: function(name) {
-                if (isNaN(name) || (!name)) {
-                    outputErrorText("Please enter manager's ID number!...")
-                } else {
-                    return true
-                }
-            }
-        },
-        //Manager Email
-        {
-            type: "input",
-            name: "managerEmail",
-            message: "What is their email address?",
-            validate: function(email) {
-                validEmail = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+([^<>()\.,;:\s@\"]{2,}|[\d\.]+))$/.test(email)
-                if (validEmail) {
-                    return true;
-                } else {
-                    outputErrorText("Please enter a valid email address...")
-                }
-            }
-        },
-        //Employee ID
-        {
-            type: "input",
-            name: "officeNumber",
-            message: "What is the manager's office number",
-            validate: function(name) {
-                if (isNaN(name) || (!name)) {
-                    outputErrorText("Please enter an office number...")
-                } else {
-                    return true
-                }
-            }
-        },
-    ])}    
 
-    teamInfo()
+            },
+            //Employee ID
+            {
+                type: "input",
+                name: "managerID",
+                message: "What is their ID number?",
+                validate: function (name) {
+                    if (isNaN(name) || (!name)) {
+                        outputErrorText("Please enter manager's ID number!...")
+                    } else {
+                        return true
+                    }
+                }
+            },
+            //Manager Email
+            {
+                type: "input",
+                name: "managerEmail",
+                message: "What is their email address?",
+                validate: function (email) {
+                    validEmail = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+([^<>()\.,;:\s@\"]{2,}|[\d\.]+))$/.test(email)
+                    if (validEmail) {
+                        return true;
+                    } else {
+                        outputErrorText("Please enter a valid email address...")
+                    }
+                }
+            },
+            //Employee ID
+            {
+                type: "input",
+                name: "officeNumber",
+                message: "What is the manager's office number",
+                validate: function (name) {
+                    if (isNaN(name) || (!name)) {
+                        outputErrorText("Please enter an office number...")
+                    } else {
+                        return true
+                    }
+                }
+            },
+        ])
+};
+
+//menu to quit
+const optionMenu = async () => {
+    const prompts = [
+        {
+            type: 'input',
+            name: 'inputValue',
+            message: 'Enter some input: '
+        },
+        {
+            type: 'input',
+            name: 'inputHello',
+            message: 'Hello: '
+        },
+        {
+            type: "confirm",
+            name: "option",
+            message: "Do you want to add team members?",
+            default: true
+        }
+    ];
+    // .then((response) => 
+    // response.name == "Yes" ? console.log("add more") : console.log("im done"))
+    const { option, ...answers } = await
+        inquirer
+            .prompt(prompts);
+    // const newInputs = [...inputs, answers];
+    return option ? optionMenu() : outputErrorText("I'm done!")
+}
+
+const main = async () => {
+    const inputs = await optionMenu();
+};
+
+
+
+
+managerInfo()
+.then(main)
 
 
 
