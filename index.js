@@ -114,80 +114,87 @@ const managerInfo = () => {
                     }
                 }
             },
+            //main menu to add members to leave
+            {
+                type: "confirm",
+                name: "mainMenu",
+                message: "Do you want to add a team member?",
+                default: true
+            }
         ])
+        .then((data) => {
+            data.mainMenu ? addMembers() : outputErrorText("I'm done!")
+        })
 };
 
-
-//main menu to say yes or no 
-const mainMenu = () => {
-    return inquirer
-    .prompt ([
-        {
-            type: "confirm",
-            name: "optionToGoBack",
-            message: "Do you want to add a team member?",
-            default: true
-        }
-    ])
-    .then((data) => {
-        data.optionToGoBack ? addMembers() : outputErrorText("I'm done!")
-    })
-}
 
 //menu to add more members
 const addMembers = () => {
     return inquirer
-    .prompt ([{
-        type: "list",
-        name: "position",
-        message: "Please choose position:",
-        choices: ["Engineer", "Intern"]
-    },
-    //team member's ID number
-    {
-        type: "input",
-        name: "memberID",
-        message: "What is their ID number?",
-        validate: function (name) {
-            if (isNaN(name) || (!name)) {
-                outputErrorText("Please enter member's ID number!...")
-            } else {
-                return true
+        .prompt([{
+            type: "list",
+            name: "position",
+            message: "Please choose position:",
+            choices: ["Engineer", "Intern"]
+        },
+        //team member's ID number
+        {
+            type: "input",
+            name: "memberID",
+            message: "What is their ID number?",
+            validate: function (name) {
+                if (isNaN(name) || (!name)) {
+                    outputErrorText("Please enter member's ID number!...")
+                } else {
+                    return true
+                }
+            }
+        },
+        //mmember's email address
+        {
+            type: "input",
+            name: "memberEmail",
+            message: "What is their email address?",
+            validate: function (email) {
+                validEmail = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+([^<>()\.,;:\s@\"]{2,}|[\d\.]+))$/.test(email)
+                if (validEmail) {
+                    return true;
+                } else {
+                    outputErrorText("Please enter a valid email address...")
+                }
             }
         }
-    },
-    {
-        type: "input",
-        name: "memberEmail",
-        message: "What is their email address?",
-        validate: function (email) {
-            validEmail = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+([^<>()\.,;:\s@\"]{2,}|[\d\.]+))$/.test(email)
-            if (validEmail) {
-                return true;
-            } else {
-                outputErrorText("Please enter a valid email address...")
+        ])
+        //adding member's info
+        .then((data) => {
+            let memberInfo = "";
+            if (data.position === "Engineer") {
+                memberInfo = "GitHub username"
+            }   else {
+                memberInfo = "school's name"
             }
-        }
-    },
-    {
-        type: "confirm",
-        name: "option",
-        message: "Do you want to add more team members?",
-        default: true
-    },
-    ])
-    .then((data) => {
-        data.option ? addMembers() : outputErrorText("I'm done!")
-    })
+            inquirer
+            .prompt ([
+                {
+                    type: "input",
+                    name: "memberInfo",
+                    message: `What is their ${memberInfo}`, 
+                },
+                {
+                    type: "confirm",
+                    name: "option",
+                    message: "Do you want to add more team members?",
+                    default: true
+                },
+            ]) 
+            .then((data) => {
+                data.option ? addMembers() : outputErrorText("I'm done!")
+            })  
+        })
 }
 
-addMembers()
 
-
-
-// managerInfo()
-// .then(mainMenu)
-
+managerInfo()
 
 
 
