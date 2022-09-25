@@ -1,9 +1,12 @@
 const inquirer = require('inquirer')
-const fs = requirer('fs')
+const fs = require('fs')
 
+const outputErrorText = (text) => console.log(`\x1b[31m${text}\x1b[0m`);
 
 //data = temporary variable
 
+
+//generate HTML to be isolated
 const generateHTML = ({ data }) =>
     `<!DOCTYPE html>
     <html lang="en">
@@ -51,3 +54,81 @@ const generateHTML = ({ data }) =>
         </main>
     </body>
     </html>`;
+
+//inquiry for team info
+const teamInfo = () => {
+    return inquirer
+    .prompt([
+        //manager Name
+        {
+            type: "input",
+            name: "managerName",
+            message: "Please enter team manager's name:",
+            validate: function(name) {
+                if (name) {
+                    return true;
+                } else {
+                    outputErrorText("Please enter manager's name!...")
+                }
+            }
+            
+        },
+        //Employee ID
+        {
+            type: "input",
+            name: "managerID",
+            message: "What is their ID number?",
+            validate: function(name) {
+                if (isNaN(name) || (!name)) {
+                    outputErrorText("Please enter manager's ID number!...")
+                } else {
+                    return true
+                }
+            }
+        },
+        //Manager Email
+        {
+            type: "input",
+            name: "managerEmail",
+            message: "What is their email address?",
+            validate: function(email) {
+                validEmail = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+([^<>()\.,;:\s@\"]{2,}|[\d\.]+))$/.test(email)
+                if (validEmail) {
+                    return true;
+                } else {
+                    outputErrorText("Please enter a valid email address...")
+                }
+            }
+        },
+        //Employee ID
+        {
+            type: "input",
+            name: "officeNumber",
+            message: "What is the manager's office number",
+            validate: function(name) {
+                if (isNaN(name) || (!name)) {
+                    outputErrorText("Please enter an office number...")
+                } else {
+                    return true
+                }
+            }
+        },
+    ])}    
+
+    teamInfo()
+
+
+
+
+
+    //to do
+    //inquirer: managers name, employee id, email address, office number
+    //then menu
+    //1. engineer/intern/finish
+    //if engineer - name, ID, email, GitHub username, back to menu
+    //if intern - name, ID, email, school, back to menu
+    //if done
+    //exit application and html is generated
+
+    //mailto email
+    //Github open to new tab
