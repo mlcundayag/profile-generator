@@ -1,14 +1,16 @@
 const inquirer = require('inquirer')
 const fs = require('fs');
-const { validate } = require('@babel/types');
+// const { validate } = require('@babel/types');
 
+const outputSuccessText = (text) => console.log(`\x1b[32m${text}\x1b[0m`);
 const outputErrorText = (text) => console.log(`\x1b[31m${text}\x1b[0m`);
+
 
 //data = temporary variable
 
 
 //generate HTML to be isolated
-const generateHTML = ({ data }) =>
+const generateHTML = () =>
     `<!DOCTYPE html>
     <html lang="en">
     <head>
@@ -123,7 +125,8 @@ const managerInfo = () => {
             }
         ])
         .then((data) => {
-            data.mainMenu ? addMembers() : outputErrorText("I'm done!")
+            const htmlPageContent = generateHTML(data);
+            data.mainMenu ? addMembers() :  writeFile(htmlPageContent)
         })
 };
 
@@ -188,14 +191,25 @@ const addMembers = () => {
                 },
             ]) 
             .then((data) => {
-                data.option ? addMembers() : outputErrorText("I'm done!")
+                const htmlPageContent = generateHTML(data);
+                data.option ? addMembers() :  writeFile(htmlPageContent)
             })  
         })
 }
 
+const writeFile = (data) => {
+    fs.writeFile('./dist/index.html', data, err => {
+        if (err) {
+            console.log(err);
+            return
+        } else {
+            outputSuccessText("Succes!\nYour team profile has been created!")
+        }
+    })
+}
+
 
 managerInfo()
-
 
 
 
