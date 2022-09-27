@@ -78,11 +78,28 @@ const managerInfo = () => {
                 default: true
             }
         ])
-        .then((data) => {
-            const htmlPageContent = generateHTML(data);
-            data.mainMenu ? addMembers() :  writeFile(htmlPageContent)
+        .then(() => {
+            mainMenu()
         })
 };
+
+//mainMenu to quit or add
+const mainMenu = () => {
+    return inquirer
+    .prompt ([
+        {
+            type: "confirm",
+            name: "mainMenu",
+            message: "Do you want to add a team member?",
+            default: true
+        }
+    ])
+    .then((data) => {
+        const htmlPageContent = generateHTML(data);
+        data.mainMenu ? addMembers() : writeFile(htmlPageContent)
+    })    
+}
+
 
 
 //menu to add more members
@@ -127,29 +144,23 @@ const addMembers = () => {
             let memberInfo = "";
             if (data.position === "Engineer") {
                 memberInfo = "GitHub username"
-            }   else {
+            } else {
                 memberInfo = "school's name"
             }
             inquirer
-            .prompt ([
-                {
-                    type: "input",
-                    name: "memberInfo",
-                    message: `What is their ${memberInfo}`, 
-                },
-                {
-                    type: "confirm",
-                    name: "option",
-                    message: "Do you want to add more team members?",
-                    default: true
-                },
-            ]) 
-            .then((data) => {
-                const htmlPageContent = generateHTML(data);
-                data.option ? addMembers() :  writeFile(htmlPageContent)
-            })  
+                .prompt([
+                    {
+                        type: "input",
+                        name: "memberInfo",
+                        message: `What is their ${memberInfo}`,
+                    }
+                ])
+                .then(() => {
+                    mainMenu()
+                })
         })
 }
+
 
 const writeFile = (data) => {
     fs.writeFile('./dist/index.html', data, err => {
@@ -165,12 +176,12 @@ const writeFile = (data) => {
 
 const init = () => {
     managerInfo()
-    .then(input => {
-        return generateHTML(input);
-    })
-    .catch(err => {
-        outputErrorText(err)
-    })
+        .then(input => {
+            return generateHTML(input);
+        })
+        .catch(err => {
+            console.log(err)
+        })
 }
 
 init()
