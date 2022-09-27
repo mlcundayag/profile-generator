@@ -24,3 +24,8 @@ test('If we can get email of employee', () => {
     expect(testEmployee.getEmail()).toEqual('test.employee@email.com')
 })
 
+//test getRole()
+test('If we can get the role of the employee', () => {
+    expect(testEmployee.getRole()).toEqual('Employee')
+})
+

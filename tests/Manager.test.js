@@ -29,3 +29,8 @@ test('If we can get email of Manager', () => {
 test('If we can get office number of the manager', () => {
     expect(testManager.getOfficeNumber()).toEqual(6789)
 })
+
+//test getRole()
+test('If we can get the role of the manager', () => {
+    expect(testManager.getRole()).toEqual('Manager')
+})
