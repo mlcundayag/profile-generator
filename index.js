@@ -1,13 +1,22 @@
+//import classes
+const Manager = require('./lib/Manager');
+const Engineer = require('./lib/Engineer');
+const Intern = require('./lib/Intern');
+
 const inquirer = require('inquirer')
 const fs = require('fs');
-const generateHTML = require('./src/generateHTML.js')
-// const { validate } = require('@babel/types');
+const path = require('path')
+const OUTPUT_DIR = path.resolve(__dirname, "dist")
+const outputPath = path.join(OUTPUT_DIR, "index.html")
 
+const generateHTML = require('./src/generateHTML.js')
 const outputSuccessText = (text) => console.log(`\x1b[32m${text}\x1b[0m`);
 const outputErrorText = (text) => console.log(`\x1b[31m${text}\x1b[0m`);
 
+const teamMembers = []
 
-//data = temporary variable
+console.log("Welcome to team generator")
+console.log("-------------------------")
 
 
 //generate HTML to be isolated
@@ -30,7 +39,7 @@ const managerInfo = () => {
                 }
 
             },
-            //Employee ID
+            //manager ID
             {
                 type: "input",
                 name: "managerID",
@@ -69,16 +78,17 @@ const managerInfo = () => {
                         return true
                     }
                 }
-            },
-            //main menu to add members to leave
-            {
-                type: "confirm",
-                name: "mainMenu",
-                message: "Do you want to add a team member?",
-                default: true
             }
         ])
-        .then(() => {
+        .then((data) => {
+            const manager = new Manager(
+                data.managerName,
+                data.managerID,
+                data.managerEmail,
+                data.officeNumber
+            )
+            console.log(manager);
+            teamMembers.push(manager);
             mainMenu()
         })
 };
@@ -86,18 +96,23 @@ const managerInfo = () => {
 //mainMenu to quit or add
 const mainMenu = () => {
     return inquirer
-    .prompt ([
-        {
-            type: "confirm",
-            name: "mainMenu",
-            message: "Do you want to add a team member?",
-            default: true
-        }
-    ])
-    .then((data) => {
-        const htmlPageContent = generateHTML(data);
-        data.mainMenu ? addMembers() : writeFile(htmlPageContent)
-    })    
+        .prompt([
+            {
+                type: "confirm",
+                name: "mainMenu",
+                message: "Do you want to add a team member?",
+                default: true
+            }
+        ])
+        .then(userChoice => {
+            if (userChoice.mainMenu === true) {
+                console.log("Adding a Team Member");
+                console.log("-------------------")
+                addMembers()
+            } else {
+                buildTeam();
+            }
+        })
 }
 
 
@@ -110,93 +125,161 @@ const addMembers = () => {
             name: "position",
             message: "Please choose position:",
             choices: ["Engineer", "Intern"]
-        },
-        //team member's ID number
-        {
-            type: "input",
-            name: "memberID",
-            message: "What is their ID number?",
-            validate: function (name) {
-                if (isNaN(name) || (!name)) {
-                    outputErrorText("Please enter member's ID number!...")
-                } else {
-                    return true
-                }
-            }
-        },
-        //mmember's email address
-        {
-            type: "input",
-            name: "memberEmail",
-            message: "What is their email address?",
-            validate: function (email) {
-                validEmail = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+([^<>()\.,;:\s@\"]{2,}|[\d\.]+))$/.test(email)
-                if (validEmail) {
-                    return true;
-                } else {
-                    outputErrorText("Please enter a valid email address...")
-                }
-            }
-        }
-        ])
-        //adding member's info
+        }])
         .then((data) => {
-            let memberInfo = "";
             if (data.position === "Engineer") {
-                memberInfo = "GitHub username"
+                addEngineer()
             } else {
-                memberInfo = "school's name"
+                addIntern()
             }
-            inquirer
-                .prompt([
-                    {
-                        type: "input",
-                        name: "memberInfo",
-                        message: `What is their ${memberInfo}`,
+        })
+}
+
+//adding engineer
+const addEngineer = () => {
+    return inquirer
+        .prompt([
+            {
+                type: "input",
+                name: "engineerName",
+                message: "What is their name?",
+                validate: function (name) {
+                    if (name) {
+                        return true;
+                    } else {
+                        outputErrorText("Please enter team member's name!...")
                     }
-                ])
-                .then(() => {
-                    mainMenu()
-                })
+                }
+            },
+            //team member's ID number
+            {
+                type: "input",
+                name: "engineerID",
+                message: "What is their ID number?",
+                validate: function (name) {
+                    if (isNaN(name) || (!name)) {
+                        outputErrorText("Please enter member's ID number!...")
+                    } else {
+                        return true
+                    }
+                }
+            },
+            //mmember's email address
+            {
+                type: "input",
+                name: "engineerEmail",
+                message: "What is their email address?",
+                validate: function (email) {
+                    validEmail = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+([^<>()\.,;:\s@\"]{2,}|[\d\.]+))$/.test(email)
+                    if (validEmail) {
+                        return true;
+                    } else {
+                        outputErrorText("Please enter a valid email address...")
+                    }
+                }
+            },
+            {
+                type: "input",
+                name: "engineerGitHub",
+                message: "What is their gitHub username?",
+                validate: function (name) {
+                    if (name) {
+                        return true;
+                    } else {
+                        outputErrorText("Please enter team member's github username!...")
+                    }
+                }
+            }
+        ])
+        .then(data => {
+            const engineer = new Engineer(
+                data.engineerName,
+                data.engineerID,
+                data.engineerEmail,
+                data.engineerGitHub,
+            )
+            console.log(engineer);
+            teamMembers.push(engineer);
+            mainMenu()
+        })
+}
+
+//adding intern
+const addIntern = () => {
+    return inquirer
+        .prompt([
+            {
+                type: "input",
+                name: "internName",
+                message: "What is their name?",
+                validate: function (name) {
+                    if (name) {
+                        return true;
+                    } else {
+                        outputErrorText("Please enter team member's name!...")
+                    }
+                }
+            },
+            //team member's ID number
+            {
+                type: "input",
+                name: "internID",
+                message: "What is their ID number?",
+                validate: function (name) {
+                    if (isNaN(name) || (!name)) {
+                        outputErrorText("Please enter member's ID number!...")
+                    } else {
+                        return true
+                    }
+                }
+            },
+            //mmember's email address
+            {
+                type: "input",
+                name: "internEmail",
+                message: "What is their email address?",
+                validate: function (email) {
+                    validEmail = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+([^<>()\.,;:\s@\"]{2,}|[\d\.]+))$/.test(email)
+                    if (validEmail) {
+                        return true;
+                    } else {
+                        outputErrorText("Please enter a valid email address...")
+                    }
+                }
+            },
+            {
+                type: "input",
+                name: "internSchool",
+                message: "What is their school name?",
+                validate: function (name) {
+                    if (name) {
+                        return true;
+                    } else {
+                        outputErrorText("Please enter team member's school!...")
+                    }
+                }
+            }
+        ])
+        .then(data => {
+            const intern = new Intern(
+                data.internName,
+                data.internID,
+                data.internEmail,
+                data.internSchool,
+            )
+            console.log(intern);
+            teamMembers.push(intern);
+            mainMenu()
         })
 }
 
 
-const writeFile = (data) => {
-    fs.writeFile('./dist/index.html', data, err => {
-        if (err) {
-            console.log(err);
-            return
-        } else {
-            outputSuccessText("Succes!\nYour team profile has been created!")
-        }
-    })
+const buildTeam = () => {
+    outputSuccessText("Success!\nYour team profile has been created!")
+    if (!fs.existsSync(OUTPUT_DIR)) {
+        fs.mkdirSync(OUTPUT_DIR)
+    }
+    fs.writeFileSync(outputPath, generateHTML(teamMembers), "utf-8")
 }
 
-
-const init = () => {
-    managerInfo()
-        .then(input => {
-            return generateHTML(input);
-        })
-        .catch(err => {
-            console.log(err)
-        })
-}
-
-init()
-
-
-
-
-    //to do
-    //inquirer: managers name, employee id, email address, office number
-    //then menu
-    //1. engineer/intern/finish
-    //if engineer - name, ID, email, GitHub username, back to menu
-    //if intern - name, ID, email, school, back to menu
-    //if done
-    //exit application and html is generated
-
-    //mailto email
-    //Github open to new tab
+managerInfo()
