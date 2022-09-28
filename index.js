@@ -12,11 +12,12 @@ const outputPath = path.join(OUTPUT_DIR, "index.html")
 const generateHTML = require('./src/generateHTML.js')
 const outputSuccessText = (text) => console.log(`\x1b[32m${text}\x1b[0m`);
 const outputErrorText = (text) => console.log(`\x1b[31m${text}\x1b[0m`);
+const outputWelcomeText = (text)  => console.log(`\x1b[33m${text}\x1b[0m`);
 
 const teamMembers = []
 
-console.log("Welcome to team generator")
-console.log("-------------------------")
+outputWelcomeText("Welcome to team generator")
+outputWelcomeText("-------------------------")
 
 
 //generate HTML to be isolated
@@ -106,8 +107,8 @@ const mainMenu = () => {
         ])
         .then(userChoice => {
             if (userChoice.mainMenu === true) {
-                console.log("Adding a Team Member");
-                console.log("-------------------")
+                outputWelcomeText("Adding a Team Member");
+                outputWelcomeText("-------------------")
                 addMembers()
             } else {
                 buildTeam();

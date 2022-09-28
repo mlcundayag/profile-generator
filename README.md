@@ -1,4 +1,4 @@
-![License Badge](https://img.shields.io/badge/license-MIT-yellow.svg) ![HTML](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![CSS](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white) ![JavaScript](https://badges.aleen42.com/src/javascript.svg) ![Bootstrap](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white) ![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white) ![Node.js](https://badges.aleen42.com/src/node.svg) ![npm](https://badges.aleen42.com/src/npm.svg) 
+![License Badge](https://img.shields.io/badge/license-MIT-yellow.svg) ![HTML](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![CSS](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E) ![Bootstrap](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white) ![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white) ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white) ![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white) 
  
 # Object-Oriented Programming Challenge: Team Profile Generator
 
@@ -13,10 +13,8 @@ I was able to successfully create a team profile generator.
 
   * [Built With](#Built-With)
   * [License](#License)
-  * [Contributing](#Contributing)
-  * [Links](#Links)
   * [Tests](#Tests)
-  * [Questions](#Questions)
+  * [Links](#Links)
   ***
 
   
@@ -24,20 +22,23 @@ I was able to successfully create a team profile generator.
   
   - ![HTML](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
   - ![CSS](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
-  - ![JavaScript](https://badges.aleen42.com/src/javascript.svg)
+  - ![JavaScript](https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E)
   - ![Bootstrap](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)
-  - ![Node.js](https://badges.aleen42.com/src/node.svg)
-  - ![npm](https://badges.aleen42.com/src/npm.svg)
+  - ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+  - ![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)
 
 
   ## License
   [MIT](https://opensource.org/licenses/MIT)
 
+  ## Test
+  ![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white)
+
 
   ## Links
 
   1. [GitHub](https://github.com/mlcundayag/profile-generator)
-  2. [Video Walkthrough]()
+  2. [Video Walkthrough](https://drive.google.com/file/d/1ng3XTbDjE3XOupQUr6h83oAyJVQLQvun/view)
 
 
   
